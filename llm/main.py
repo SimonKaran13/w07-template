@@ -193,7 +193,10 @@ async def recommend(req: RecommendRequest) -> RecommendResponse:
         todays_meals_str = ", ".join(req.todays_menu)
         
         # TODO Use LangChain to generate recommendation
-        recommendation = ""
+         recommendation = recommendation_chain.invoke({
+            "favorite_menu": favorite_meals_str,
+            "todays_menu": todays_meals_str
+         })
         
         # Return the LLM response as the recommendation
         return RecommendResponse(recommendation=recommendation)
