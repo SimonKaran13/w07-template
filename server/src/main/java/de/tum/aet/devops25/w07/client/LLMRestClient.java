@@ -3,6 +3,7 @@ package de.tum.aet.devops25.w07.client;
 import de.tum.aet.devops25.w07.dto.RecommendRequest;
 import de.tum.aet.devops25.w07.dto.RecommendResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -28,13 +29,15 @@ public class LLMRestClient {
      */
     public String generateRecommendations(List<String> favoriteMenu, List<String> todaysMenu) {
         try {
-            // TODO Create request body
+            RecommendRequest request = new RecommendRequest(favoriteMenu, todaysMenu);
 
-            // TODO Make REST call using this.restClient
-
-            // TODO Extract the recommendation
-            return "";
-
+            var response =  restClient.post()
+                    .uri("/recommend")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .body(request)
+                    .retrieve()
+                    .toEntity(RecommendResponse.class);
+            return response.getBody().recommendation();
         } catch (Exception e) {
             System.err.println("Error calling LLM REST service: " + e.getMessage());
             return "";

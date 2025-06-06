@@ -27,10 +27,9 @@ public class LLMRecommendationService {
             // Convert today's dishes to meal names
              List<String> todayMealNames = todayMeals.stream()
                     .map(Dish::name)
-                    .collect(Collectors.toList());
+                    .toList();
 
-            // TODO Call REST client
-            return "";
+            return llmRestClient.generateRecommendations(favoriteMeals, todayMealNames);
 
         } catch (Exception e) {
             System.err.println("Error fetching recommendation from LLM service: " + e.getMessage());
